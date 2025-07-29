@@ -1,36 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list_app/data/dummy_items.dart';
 
 class ShoppingListItem extends StatelessWidget {
-  const ShoppingListItem({
-    super.key,
-    required this.name,
-    required this.quantity,
-    required this.color,
-  });
-
-  final String name;
-  final int quantity;
-  final Color color;
+  const ShoppingListItem({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 20.0,
-          height: 20.0,
-          child: DecoratedBox(decoration: BoxDecoration(color: color)),
+    return ListView.builder(
+      itemCount: groceryItems.length,
+      itemBuilder: (ctx, index) => ListTile(
+        title: Text(groceryItems[index].name),
+        leading: Container(
+          width: 24,
+          height: 24,
+          color: groceryItems[index].category.color,
         ),
-        const Padding(padding: EdgeInsets.only(right: 35)),
-        Expanded(child: Text(name, textAlign: TextAlign.justify)),
-        Expanded(
-          child: Text(
-            quantity.toString(),
-            textAlign: TextAlign.end,
-            style: const TextStyle(fontSize: 15),
-          ),
-        ),
-      ],
+        trailing: Text(groceryItems[index].quantity.toString()),
+      ),
     );
   }
 }
