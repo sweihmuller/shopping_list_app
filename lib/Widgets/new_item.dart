@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shopping_list_app/data/categories.dart';
 import 'package:shopping_list_app/models/category.dart';
-import 'package:shopping_list_app/models/grocery_item.dart';
 import 'package:http/http.dart' as http;
 
 class NewItem extends StatefulWidget {
@@ -21,14 +20,14 @@ class _NewItemState extends State<NewItem> {
   int _enteredValue = 1;
   Category _selectedCategory = categories[Categories.vegetables]!;
 
-  void _saveItem() {
+  void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final url = Uri.https(
         'flutter-prep-b0750-default-rtdb.firebaseio.com',
         'shopping-list.json',
       );
-      http.post(
+      final response = await http.post(
         url,
         headers: {'Content-type': 'application/json'},
         body: json.encode({
@@ -37,6 +36,9 @@ class _NewItemState extends State<NewItem> {
           'category': _selectedCategory.name,
         }),
       );
+      if (!context.mounted) {
+        return;
+      }
       Navigator.of(context).pop();
     }
   }
