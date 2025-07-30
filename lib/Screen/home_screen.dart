@@ -30,12 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     final response = await http.get(url);
     final Map<String, dynamic> listData = json.decode(response.body);
-    final List<GroceryItem> _loadItems = [];
+    final List<GroceryItem> loadItems = [];
     for (final item in listData.entries) {
       final category = categories.entries.firstWhere(
         (categoryItem) => categoryItem.value.name == item.value['category'],
       );
-      _loadItems.add(
+      loadItems.add(
         GroceryItem(
           id: item.key,
           name: item.value['name'],
@@ -45,14 +45,22 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     setState(() {
-      _groceryItems = _loadItems;
+      _groceryItems = loadItems;
     });
   }
 
-  void _addItem() {
-    Navigator.of(context).push<GroceryItem>(
+  void _addItem() async {
+    final newItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(builder: (context) => const NewItem()),
     );
+
+    if (newItem == null) {
+      return;
+    }
+
+    setState(() {
+      _groceryItems.add(newItem);
+    });
   }
 
   @override
