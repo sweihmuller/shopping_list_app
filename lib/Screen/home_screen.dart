@@ -16,11 +16,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<GroceryItem> _groceryItems = [];
-
+  bool _isLoading = true;
   @override
   void initState() {
     super.initState();
     _loadItems();
+    _isLoading = false;
   }
 
   void _loadItems() async {
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {
       _groceryItems = loadItems;
+      _isLoading = false;
     });
   }
 
@@ -60,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       _groceryItems.add(newItem);
+      _isLoading = false;
     });
   }
 
@@ -70,7 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Your Groceries'),
         actions: [IconButton(onPressed: _addItem, icon: const Icon(Icons.add))],
       ),
-      body: ShoppingListItem(groceryItem: _groceryItems),
+      body: _isLoading == true
+          ? const Center(child: CircularProgressIndicator())
+          : ShoppingListItem(groceryItem: _groceryItems),
     );
   }
 }
