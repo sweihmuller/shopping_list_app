@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list_app/models/grocery_item.dart';
+import 'package:http/http.dart' as http;
 
 class ShoppingListItem extends StatefulWidget {
   const ShoppingListItem({super.key, required this.groceryItem});
@@ -11,6 +12,11 @@ class ShoppingListItem extends StatefulWidget {
 
 class _ShoppingListItemState extends State<ShoppingListItem> {
   void _removeItem(GroceryItem item) {
+    final url = Uri.https(
+      'flutter-prep-b0750-default-rtdb.firebaseio.com',
+      'shopping-list/${item.id}.json',
+    );
+    http.delete(url);
     setState(() {
       widget.groceryItem.remove(item);
     });

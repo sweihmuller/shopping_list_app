@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Your Groceries'),
         actions: [IconButton(onPressed: _addItem, icon: const Icon(Icons.add))],
       ),
-      body: _isLoading == true
+      body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ShoppingListItem(groceryItem: _groceryItems),
     );
